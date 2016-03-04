@@ -4,7 +4,7 @@
   "main": "index.js",
   "readme": "ERROR: No README data found!"
   "scripts": {
-    "test": "testee tests.html"
+    "test": "DEBUG=testee:* testee tests.html"
   },
   "author": "Bitovi",
   "license": "MIT",
