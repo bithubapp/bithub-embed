@@ -4,7 +4,7 @@
   "main": "index.js",
   "readme": "ERROR: No README data found!"
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "testee tests.html"
   },
   "author": "Bitovi",
   "license": "MIT",
@@ -21,9 +21,10 @@
     "bit-social": "bithubapp/bit-social"
   },
   "devDependencies": {
-    "steal-qunit": "0.1.1",
     "funcunit": "3.0.0",
-    "steal-tools": "^0.14.0-pre.1"
+    "steal-qunit": "0.1.1",
+    "steal-tools": "^0.14.0-pre.1",
+    "testee": "^0.2.5"
   },
   "system": {
     "npmAlgorithm": "flat",
