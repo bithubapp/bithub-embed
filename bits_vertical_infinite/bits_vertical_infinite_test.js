@@ -29,7 +29,7 @@ var State = can.Map.extend({
 
 QUnit.module('Bits Vertical Infinite Test');
 
-QUnit.test('List Partitioning', function(){
+QUnit.skip('List Partitioning', function(){
 	var sourceList = new can.List();
 	var list = new PartitionedColumnList(sourceList);
 	var firstColumn;
@@ -180,7 +180,7 @@ QUnit.test('Pausing prepend and restarting the content', function(){
 	);
 });
 
-QUnit.test("Rendering", function(){
+QUnit.skip("Rendering", function(){
 	var bits = new Bit.List();
 	var cleanup = withRendered(new can.Map({
 		state : new State(),

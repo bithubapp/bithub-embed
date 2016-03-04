@@ -1,14 +1,6 @@
 {{#if shouldRender}}
 	{{#bit}}
-		<div class="bit-wrap {{#unless __isLoaded}}loading{{/unless}} {{#unless __resolvedHeight}}animate-height{{/unless}} {{pinnedClass}} {{blockedClass}}">
-			{{#if showAdminPanel}}
-				<div class="admin-panel">
-          <div class="moderation approved {{#isApproved}}active-decision{{/isApproved}}" can-click="makeApproved">Approve</div>
-          <div class="moderation starred {{#isStarred}}active-decision{{/isStarred}}" can-click="makeStarred">Star</div>
-          <div class="moderation deleted {{#isDeleted}}active-decision{{/isDeleted}}" can-click="makeDeleted">Delete</div>
-				</div>
-			{{/if}}
-			
+		<div class="bit-wrap {{#unless __isLoaded}}loading{{/unless}} {{#unless __resolvedHeight}}animate-height{{/unless}}}">
 			<div class="bit">
 				<div class="bit-content">
 
@@ -28,33 +20,37 @@
 							<div class="body-inner-wrap">{{{ body }}}</div>
 						{{/if}}
 					</bh-body-wrap>
-					
-          {{#quoted_status}}
-            <div class="quoted-tweet">
-              {{{ title }}}
-              <div class="author-date-wrap bit-footer">
-                {{#author.avatar_url}}
-						<figure class="bit-avatar">
-							<a href="{{url}}">
-								<img class="bit-avatar--img img-responsive" src="{{.}}" />
-							</a>
-						</figure>
-					{{/author.avatar_url}}
-					<figcaption>
-						{{#author.id}}
-							<div class="bit-authorName"><a href="{{url}}">{{.}}</a></div>
-						{{/author.id}}
-						{{#unless isTwitterFollow}}
-							<div class="bit-created-at">
-								{{formattedQuotedTweetDate created_at}}
-							</div>
-						{{/unless}}
-					</figcaption>
-              </div>
-            </div>
-          {{/quoted_status}}
 
-					<bh-share-bit class="{{#if sharePanelOpen}}expanded{{/if}}" card-title="{title}" media="{images.0.url}" url="{url}" bit="{.}" state="{state}"></bh-share-bit>
+                    {{#quoted_status}}
+                        <div class="quoted-tweet">
+                            {{{ title }}}
+                            <div class="author-date-wrap bit-footer">
+                                {{#author.avatar_url}}
+                                    <figure class="bit-avatar">
+                                        <a href="{{url}}">
+                                            <img class="bit-avatar--img img-responsive" src="{{.}}" />
+                                        </a>
+                                    </figure>
+                                {{/author.avatar_url}}
+                                <figcaption>
+                                    {{#author.id}}
+                                        <div class="bit-authorName"><a href="{{url}}">{{.}}</a></div>
+                                    {{/author.id}}
+                                    {{#unless isTwitterFollow}}
+                                        <div class="bit-created-at">
+                                            {{formattedQuotedTweetDate created_at}}
+                                        </div>
+                                    {{/unless}}
+                                </figcaption>
+                            </div>
+                        </div>
+                    {{/quoted_status}}
+
+					<bit-social class="{{#if sharePanelOpen}}expanded{{/if}}"
+                                text="{title}"
+                                image="{images.0.url}"
+                                url="{url}" />
+
 				</div>
 				
 				<footer class="bit-footer col-sm-12">
@@ -65,6 +61,7 @@
 							</a>
 						</figure>
 					{{/author.avatar_url}}
+
 					<figcaption>
 						{{#author.id}}
 							<div class="bit-authorName"><a href="{{url}}">{{.}}</a></div>
@@ -75,18 +72,14 @@
 							</div>
 						{{/unless}}
 					</figcaption>
-					<a href="{{url}}" class="social-icon">
+
+					<a href="{{url}}" class="network-icon">
 						<img src="{{state.assetRoot}}images/social-empty/{{feed_name}}.png">
 					</a>
+
 					<i class="fa fa-share-alt share-panel-toggle {{#if sharePanelOpen}}open{{/if}}" can-click="sharePanelToggle"></i>
 				</footer>
 			</div>
-			{{#if actionFail}}
-				<div class="action-fail-alert">
-					<i class="fa fa-times" can-click="removeFailNotice"></i>
-					<div>Oops, we were not able to <b>{{actionFailTitle}}</b> this item<br> Please try again later.</div>
-				</div>
-			{{/if}}
 		</div>
 	{{/bit}}
 {{/if}}

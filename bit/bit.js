@@ -1,11 +1,11 @@
 import can from "can/";
-import initView from "./bit.stache!";
+import template from "./bit.stache!";
 import _map from "lodash-amd/modern/collection/map";
 import moment from "moment";
 
 import "./image-gallery/image-gallery";
 import "./body-wrap/body-wrap";
-import "./share-bit/share-bit";
+import "bit-social";
 
 import "./bit.less!";
 import "can/construct/super/super";
@@ -29,70 +29,20 @@ var imageStatus = function(img){
 };
 
 export var BitVM = can.Map.extend({
-	actionFail: null,
 	sharePanelOpen: false,
-	toggleApproveBit : function(){
-		if(this.attr('bit.is_approved')){
-			this.disapproveBit();
-		} else {
-			this.approveBit();
-		}
-	},
-	togglePinBit : function(){
-		if(this.attr('bit.is_pinned')){
-			this.unpinBit();
-		} else {
-			this.pinBit();
-		}
-	},
-	actionFailTitle : function(){
-		var actionFail = this.attr('actionFail');
-		return actionFail === 'disapprove' ? 'block' : actionFail;
-	},
-	removeFailNotice : function(){
-		this.attr('actionFail', null);
-	},
-	showAdminPanel : function(){
-		return !!this.attr('state').isAdmin() && !(this.attr('actionFail'));
-	},
+
 	sharePanelToggle : function(){
 		this.attr('sharePanelOpen', !this.attr('sharePanelOpen'));
 	},
 	shouldRender : function(){
 		var bit = this.attr('bit');
 		return bit && !bit.attr('__pendingRender');
-	},
-	blockedClass : function(){
-		if(!!this.attr('state').isAdmin() && this.attr('bit').isDeleted()){
-			return 'blocked';
-		}
-		return "";
-	},
-	pinnedClass : function(){
-		if(!!this.attr('state').isAdmin() && this.attr('bit').isStarred()){
-			return 'pinned';
-		}
-		return "";
 	}
 });
 
-var BIT_DECISIONS = ['pending', 'approved', 'starred', 'deleted'];
-
-for(var i = 0; i < BIT_DECISIONS.length; i++){
-	BitVM.prototype['make' + can.capitalize(BIT_DECISIONS[i])] = (function(action){
-		return function(){
-			var self = this;
-			var def = this.attr('bit')['decide' + can.capitalize(action)](this.attr('state.hubId'));
-			def.fail(function(){
-				self.attr('actionFail', action);
-			});
-		};
-	})(BIT_DECISIONS[i]);
-}
-
 can.Component.extend({
 	tag: 'bh-bit',
-	template : initView,
+	template : template,
 	scope : BitVM,
 	helpers : {
 		formattedTitle : function(title){
@@ -130,6 +80,15 @@ can.Component.extend({
 				this.removeExplicitHeight();
 			}
 		},
+
+		// Clean up the timeouts
+		destroy : function(){
+			clearTimeout(this.__imgSweeperTimeout);
+			clearTimeout(this.__initTimeout);
+			clearTimeout(this.__removeExplicitHeightTimeout);
+			return this._super.apply(this, arguments);
+		},
+
 		'{bit} __pendingRender' : function(bit, ev, newVal){
 			if(newVal === false){
 				setTimeout(() => {
@@ -140,6 +99,13 @@ can.Component.extend({
 				}, 1);
 			}
 		},
+
+		'a click' : function(el, ev){
+			ev.preventDefault();
+			window.open(el.attr('href'));
+			this.element.trigger('interaction:link', [this.scope.attr('state.hubId'), this.scope.attr('bit.id')]);
+		},
+
 		initImages : function(){
 			this.imgs = this.element.find('img').toArray();
 			this.imagesToLoadCount = this.imgs.length;
@@ -150,11 +116,7 @@ can.Component.extend({
 				this.doneLoading();
 			}
 		},
-		'a click' : function(el, ev){
-			ev.preventDefault();
-			window.open(el.attr('href'));
-			this.element.trigger('interaction:link', [this.scope.attr('state.hubId'), this.scope.attr('bit.id')]);
-		},
+
 		// Go through all images and make sure all are loaded or errored
 		// Before calling the `doneLoading` function which will remove the loading class
 		imgSweeper : function(){
@@ -177,6 +139,7 @@ can.Component.extend({
 				}
 			}
 		},
+
 		// All images in bit are loaded and we can calculate it's height. We set the explicit height
 		// to make sure that that the transition animation runs.
 		doneLoading : function(){
@@ -187,6 +150,7 @@ can.Component.extend({
 			bit.attr('__isLoaded', true);
 			this.bitLoadedAndRendered();
 		},
+
 		// When we're done with the height transition remove the explicit height
 		// and mark the bit's height as resolved
 		removeExplicitHeight : function(){
@@ -199,6 +163,7 @@ can.Component.extend({
 				}
 			}, 1);
 		},
+
 		bitLoadedAndRendered : function(){
 			var bit = this.scope.attr('bit');
 			var check = bit.attr('__resolvedHeight') && bit.attr('__isLoaded') && !bit.attr('__pendingRender');
@@ -206,14 +171,6 @@ can.Component.extend({
 			if(check){
 				this.element.trigger('bit:loaded');
 			}
-					
-		},
-		// Clean up the timeouts
-		destroy : function(){
-			clearTimeout(this.__imgSweeperTimeout);
-			clearTimeout(this.__initTimeout);
-			clearTimeout(this.__removeExplicitHeightTimeout);
-			return this._super.apply(this, arguments);
 		}
 	}
 });
