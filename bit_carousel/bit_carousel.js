@@ -37,35 +37,8 @@ var imageStatus = function(img){
 };
 
 export var BitVM = can.Map.extend({
-	//actionFail: null,
 	sharePanelOpen: false,
-	
-	/*
-	toggleApproveBit : function(){
-		if(this.attr('bit.is_approved')){
-			this.disapproveBit();
-		} else {
-			this.approveBit();
-		}
-	},
-	togglePinBit : function(){
-		if(this.attr('bit.is_pinned')){
-			this.unpinBit();
-		} else {
-			this.pinBit();
-		}
-	},
-	actionFailTitle : function(){
-		var actionFail = this.attr('actionFail');
-		return actionFail === 'disapprove' ? 'block' : actionFail;
-	},
-	removeFailNotice : function(){
-		this.attr('actionFail', null);
-	},
-	showAdminPanel : function(){
-		return !!this.attr('state').isAdmin() && !(this.attr('actionFail'));
-	},*/
-	
+
 	sharePanelToggle : function(){
 		this.attr('sharePanelOpen', !this.attr('sharePanelOpen'));
 	},
@@ -73,19 +46,6 @@ export var BitVM = can.Map.extend({
 		var bit = this.attr('bit');
 		return bit && !bit.attr('__pendingRender');
 	}
-	/*,
-	blockedClass : function(){
-		if(!!this.attr('state').isAdmin() && !this.attr('bit').attr('is_approved')){
-			return 'blocked';
-		}
-		return "";
-	},
-	pinnedClass : function(){
-		if(!!this.attr('state').isAdmin() && this.attr('bit').attr('is_pinned')){
-			return 'pinned';
-		}
-		return "";
-	}*/
 });
 
 

@@ -2,10 +2,11 @@
   "name": "bithub-embed",
   "version": "0.1.0",
   "main": "index.js",
+  "readme": "ERROR: No README data found!"
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Bitovi",
   "license": "MIT",
   "dependencies": {
     "lodash-amd": "3.9.3",
@@ -16,14 +17,16 @@
     "browser-cookie-lite": "1.0.4",
     "owl.carousel": "git+https://github.com/smashingboxes/OwlCarousel2.git",
     "steal": "stealjs/steal#605-locate-path-schemes",
-    "bootstrap": "3.3.4",
-    "moment": "2.10.3"
+    "moment": "2.10.3",
+    "bit-social": "bithubapp/bit-social"
   },
   "devDependencies": {
-    "steal-qunit": "0.0.4",
+    "steal-qunit": "0.1.1",
     "funcunit": "3.0.0",
     "steal-tools": "^0.14.0-pre.1"
   },
   "system": {
+    "npmAlgorithm": "flat",
+    "configDependencies": ["live-reload"]
   }
 }
