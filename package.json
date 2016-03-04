@@ -2,7 +2,7 @@
   "name": "bithub-embed",
   "version": "0.1.0",
   "main": "index.js",
-  "readme": "ERROR: No README data found!"
+  "readme": "ERROR: No README data found!",
   "scripts": {
     "test": "testee tests.html --browsers firefox"
   },
